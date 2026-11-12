@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cuidar Transforma – Vila Esperança | PET-Saúde</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Phaser 3 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
+</head>
+
+<body>
+
+    <div id="game-container">
+        <div class="hud-overlay">
+            <div class="hud-card" id="hud-objectives">
+                <div style="color: #e09f3e; margin-bottom: 4px; font-size: 14px;">VILA ESPERANÇA (PET-SAÚDE)</div>
+                <div id="m-dengue">🪣 Operação Dengue: 0/3</div>
+                <div id="m-rua">🌊 Rua Alagada: 0/2</div>
+                <div id="m-calor">☀️ Calor Extremo: 0/2</div>
+                <div id="m-lixo">♻️ Bairro Limpo: 0/2</div>
+                <div id="hud-compass" style="margin-top: 6px; padding-top: 5px; border-top: 1px dashed rgba(184, 174, 156, 0.4); font-size: 11px; color: #cbd5e0; font-weight: normal;">
+                    <div style="color: #ecc94b; font-size: 10px; font-weight: bold; margin-bottom: 2px;">🧭 GUIA DE ORIENTAÇÃO:</div>
+                    <div id="dir-dengue">🪣 Dengue: ↗ Norte</div>
+                    <div id="dir-rua">🌊 Rua: → Leste</div>
+                    <div id="dir-calor">☀️ Calor: ⊙ Centro</div>
+                    <div id="dir-lixo">♻️ Lixo: ← Oeste</div>
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <div class="hud-card" id="hud-score">PONTOS: 0 / 450</div>
+                <div class="hud-card" id="hud-timer">TEMPO: 05:00</div>
+            </div>
+        </div>
+        <div id="prompt-interaction">[E] ou [ESPAÇO] INTERAGIR</div>
+    </div>
+
+    <!-- Módulos do Jogo -->
+    <script src="js/audio.js"></script>
+    <script src="js/assets.js"></script>
+    <script src="js/minigame.js"></script>
+    <script src="js/worldScene.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
