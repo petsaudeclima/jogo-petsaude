@@ -6,39 +6,370 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Cuidar Transforma – Vila Esperança | PET-Saúde</title>
     <link rel="stylesheet" href="css/style.css">
-    <!-- Phaser 3 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
 </head>
 
 <body>
+    <div id="viewport-wrapper">
+        <div id="game-container" data-ui-state="MENU">
+            <!-- LAYER 5: HUD COMPACTO (Visível em PLAYING e atenuado em DIALOGUE/PAUSED) -->
+            <div id="hud-overlay" class="hud-overlay is-hidden" aria-hidden="true">
+                <div class="hud-left-col">
+                    <div class="pixel-panel hud-missions-panel" id="hud-objectives">
+                        <div class="hud-panel-header">
+                            <span class="hud-panel-title">CUIDADOS DA COMUNIDADE</span>
+                            <button type="button" id="btn-missions-toggle" class="pixel-btn-mini"
+                                title="Detalhes das missões [M]">[M]</button>
+                        </div>
 
-    <div id="game-container">
-        <div class="hud-overlay">
-            <div class="hud-card" id="hud-objectives">
-                <div style="color: #e09f3e; margin-bottom: 4px; font-size: 14px;">VILA ESPERANÇA (PET-SAÚDE)</div>
-                <div id="m-dengue">🪣 Operação Dengue: 0/3</div>
-                <div id="m-rua">🌊 Rua Alagada: 0/2</div>
-                <div id="m-calor">☀️ Calor Extremo: 0/2</div>
-                <div id="m-lixo">♻️ Bairro Limpo: 0/2</div>
-                <div id="hud-compass" style="margin-top: 6px; padding-top: 5px; border-top: 1px dashed rgba(184, 174, 156, 0.4); font-size: 11px; color: #cbd5e0; font-weight: normal;">
-                    <div style="color: #ecc94b; font-size: 10px; font-weight: bold; margin-bottom: 2px;">🧭 GUIA DE ORIENTAÇÃO:</div>
-                    <div id="dir-dengue">🪣 Dengue: ↗ Norte</div>
-                    <div id="dir-rua">🌊 Rua: → Leste</div>
-                    <div id="dir-calor">☀️ Calor: ⊙ Centro</div>
-                    <div id="dir-lixo">♻️ Lixo: ← Oeste</div>
+                        <div class="mission-row" id="row-dengue">
+                            <img data-icon="icon-dengue" alt="" class="pixel-img mission-icon" width="16" height="16">
+                            <span class="mission-name">Dengue</span>
+                            <span class="mission-pips" id="pips-dengue"></span>
+                            <span class="mission-count" id="m-dengue">0/3</span>
+                            <img data-icon="icon-check" alt="Concluída" class="pixel-img mission-check" width="14"
+                                height="14">
+                        </div>
+
+                        <div class="mission-row" id="row-rua">
+                            <img data-icon="icon-rua" alt="" class="pixel-img mission-icon" width="16" height="16">
+                            <span class="mission-name">Rua Alagada</span>
+                            <span class="mission-pips" id="pips-rua"></span>
+                            <span class="mission-count" id="m-rua">0/2</span>
+                            <img data-icon="icon-check" alt="Concluída" class="pixel-img mission-check" width="14"
+                                height="14">
+                        </div>
+
+                        <div class="mission-row" id="row-calor">
+                            <img data-icon="icon-calor" alt="" class="pixel-img mission-icon" width="16" height="16">
+                            <span class="mission-name">Calor Extremo</span>
+                            <span class="mission-pips" id="pips-calor"></span>
+                            <span class="mission-count" id="m-calor">0/2</span>
+                            <img data-icon="icon-check" alt="Concluída" class="pixel-img mission-check" width="14"
+                                height="14">
+                        </div>
+
+                        <div class="mission-row" id="row-lixo">
+                            <img data-icon="icon-lixo" alt="" class="pixel-img mission-icon" width="16" height="16">
+                            <span class="mission-name">Bairro Limpo</span>
+                            <span class="mission-pips" id="pips-lixo"></span>
+                            <span class="mission-count" id="m-lixo">0/2</span>
+                            <img data-icon="icon-check" alt="Concluída" class="pixel-img mission-check" width="14"
+                                height="14">
+                        </div>
+                    </div>
+
+                    <!-- Rastreador Discreto -->
+                    <div class="pixel-pill hud-tracker" id="hud-tracker">
+                        <img data-icon="icon-compass" alt="" class="pixel-img" width="14" height="14">
+                        <span id="hud-tracker-text">Explore a Vila Esperança</span>
+                    </div>
+                </div>
+
+                <div class="hud-right-col">
+                    <div class="pixel-panel hud-stat-pill" id="hud-score-card">
+                        <img data-icon="icon-star" alt="" class="pixel-img" width="16" height="16">
+                        <span class="stat-label">PONTOS</span>
+                        <span class="stat-value" id="hud-score-val">0/450</span>
+                    </div>
+                    <div class="pixel-panel hud-stat-pill" id="hud-timer-card">
+                        <img data-icon="icon-clock" alt="" class="pixel-img" width="16" height="16">
+                        <span class="stat-label">TEMPO</span>
+                        <span class="stat-value" id="hud-timer-val">05:00</span>
+                    </div>
+                    <button type="button" id="btn-pause" class="pixel-btn-icon" title="Pausar [ESC]">II</button>
                 </div>
             </div>
-            <div style="display: flex; gap: 10px;">
-                <div class="hud-card" id="hud-score">PONTOS: 0 / 450</div>
-                <div class="hud-card" id="hud-timer">TEMPO: 05:00</div>
+
+            <!-- Toasts de Missão Concluída -->
+            <div id="toast-container" aria-live="polite"></div>
+
+            <!-- Prompt de Interação (Visível apenas em PLAYING próximo a objetos/NPCs) -->
+            <div id="prompt-interaction" class="pixel-prompt is-hidden" aria-hidden="true">
+                <span class="prompt-key">E / ESPAÇO</span>
+                <span id="prompt-text">Interagir</span>
+            </div>
+
+            <!-- Modal Opcional de Detalhes das Missões [M] -->
+            <div id="modal-missions" class="modal-backdrop is-hidden" aria-hidden="true">
+                <div class="pixel-panel modal-card missions-modal-card">
+                    <div class="modal-header">
+                        <h2>GUIA DE CUIDADOS — VILA ESPERANÇA</h2>
+                        <button type="button" id="btn-missions-close" class="pixel-btn-mini">X</button>
+                    </div>
+                    <div class="missions-detail-grid">
+                        <div class="mission-detail-box">
+                            <div class="md-title">
+                                <img data-icon="icon-dengue" alt="" class="pixel-img" width="16" height="16">
+                                <span>Operação Dengue (100 pts)</span>
+                            </div>
+                            <p>Norte e Oeste: trate o prato de planta com areia, recolha pneus/garrafas e tampe a caixa
+                                d'água.</p>
+                        </div>
+                        <div class="mission-detail-box">
+                            <div class="md-title">
+                                <img data-icon="icon-rua" alt="" class="pixel-img" width="16" height="16">
+                                <span>Rua Alagada (100 pts)</span>
+                            </div>
+                            <p>Rua Principal (Leste): desobstrua o bueiro com segurança e sinalize a área alagada com
+                                cones.</p>
+                        </div>
+                        <div class="mission-detail-box">
+                            <div class="md-title">
+                                <img data-icon="icon-calor" alt="" class="pixel-img" width="16" height="16">
+                                <span>Calor Extremo (100 pts)</span>
+                            </div>
+                            <p>Praça Central: auxilie o Seu Antônio com sombra e água, e ative a tenda com bebedouro
+                                público.</p>
+                        </div>
+                        <div class="mission-detail-box">
+                            <div class="md-title">
+                                <img data-icon="icon-lixo" alt="" class="pixel-img" width="16" height="16">
+                                <span>Bairro Limpo (150 pts)</span>
+                            </div>
+                            <p>Área Ambiental (Oeste): oriente o morador sobre a lixeira suspensa e conclua a Estação de
+                                Triagem.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LAYER 6: DIÁLOGOS -->
+            <div id="screen-dialogue" class="dialogue-overlay is-hidden" aria-hidden="true">
+                <div class="pixel-panel dialogue-box">
+                    <div class="dialogue-portrait-frame">
+                        <img id="dlg-portrait" src="" alt="" class="pixel-img" width="64" height="64">
+                    </div>
+                    <div class="dialogue-content">
+                        <div class="dialogue-speaker-row">
+                            <span id="dlg-speaker" class="dialogue-speaker">Coordenadora</span>
+                        </div>
+                        <p id="dlg-text" class="dialogue-text"></p>
+                        <div id="dlg-options" class="dialogue-options is-hidden"></div>
+                        <div id="dlg-hint" class="dialogue-hint">[ESPAÇO] ou [E] Continuar</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LAYER 7: MINIGAME DE TRIAGEM (Exclusivo) -->
+            <div id="screen-minigame" class="modal-backdrop is-hidden" aria-hidden="true">
+                <div class="pixel-panel minigame-panel">
+                    <div class="mg-header">
+                        <div>
+                            <h2 class="mg-title">ESTAÇÃO DE TRIAGEM</h2>
+                            <p class="mg-subtitle">Separe os resíduos e ajude a cuidar da comunidade!</p>
+                        </div>
+                        <div class="mg-progress-box">
+                            <span id="mg-progress-text">Progresso da triagem: 0/4</span>
+                            <div id="mg-progress-pips" class="mg-progress-pips"></div>
+                        </div>
+                    </div>
+
+                    <div class="mg-stage">
+                        <div id="mg-item-card" class="mg-item-card">
+                            <div class="mg-item-frame">
+                                <img id="mg-item-img" src="" alt="" class="pixel-img" width="64" height="64">
+                            </div>
+                            <span id="mg-item-name" class="mg-item-name">Caixa de Papelão</span>
+                        </div>
+
+                        <div id="mg-conclusion" class="mg-conclusion is-hidden">
+                            <img data-icon="icon-check" alt="" class="pixel-img" width="40" height="40">
+                            <p>Triagem concluída! Você ajudou a organizar a coleta seletiva da Vila Esperança!</p>
+                            <button type="button" id="btn-mg-finish" class="pixel-btn pixel-btn-primary">CONCLUIR
+                                TRIAGEM</button>
+                        </div>
+                    </div>
+
+                    <div id="mg-feedback" class="mg-feedback"></div>
+
+                    <div id="mg-bins" class="mg-bins-grid">
+                        <button type="button" class="mg-bin-btn bin-papel" data-bin="papel">
+                            <span class="bin-shortcut">1</span>
+                            <img data-icon="bin-papel" alt="" class="pixel-img" width="40" height="48">
+                            <span class="bin-label">Papel</span>
+                            <span class="bin-sub">Azul</span>
+                        </button>
+                        <button type="button" class="mg-bin-btn bin-vidro" data-bin="vidro">
+                            <span class="bin-shortcut">2</span>
+                            <img data-icon="bin-vidro" alt="" class="pixel-img" width="40" height="48">
+                            <span class="bin-label">Vidro</span>
+                            <span class="bin-sub">Verde</span>
+                        </button>
+                        <button type="button" class="mg-bin-btn bin-plastico" data-bin="plastico">
+                            <span class="bin-shortcut">3</span>
+                            <img data-icon="bin-plastico" alt="" class="pixel-img" width="40" height="48">
+                            <span class="bin-label">Plástico</span>
+                            <span class="bin-sub">Vermelho</span>
+                        </button>
+                        <button type="button" class="mg-bin-btn bin-organico" data-bin="organico">
+                            <span class="bin-shortcut">4</span>
+                            <img data-icon="bin-organico" alt="" class="pixel-img" width="40" height="48">
+                            <span class="bin-label">Orgânicos</span>
+                            <span class="bin-sub">Composteira</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LAYER 7: MENU PRINCIPAL -->
+            <div id="screen-menu" class="modal-backdrop menu-backdrop" aria-hidden="false">
+                <div class="pixel-panel menu-card">
+                    <div class="menu-badge">PET-SAÚDE • VILA ESPERANÇA</div>
+                    <h1 class="menu-title">CUIDAR TRANSFORMA</h1>
+                    <p class="menu-desc">Assuma o papel de Agente Comunitário de Saúde e atue nas quatro frentes
+                        preventivas do bairro em 5 minutos.</p>
+
+                    <div class="menu-cast-row">
+                        <img data-icon="portrait-player" alt="Agente" class="pixel-img cast-avatar" width="40"
+                            height="40">
+                        <img data-icon="portrait-coordenadora" alt="Coordenadora" class="pixel-img cast-avatar"
+                            width="40" height="40">
+                        <img data-icon="portrait-antonio" alt="Seu Antônio" class="pixel-img cast-avatar" width="40"
+                            height="40">
+                        <img data-icon="portrait-joao" alt="João" class="pixel-img cast-avatar" width="40" height="40">
+                        <img data-icon="portrait-morador" alt="Morador" class="pixel-img cast-avatar" width="40"
+                            height="40">
+                    </div>
+
+                    <div class="menu-controls-hint">
+                        <span><strong>WASD / Setas</strong> Mover</span>
+                        <span><strong>E / Espaço</strong> Interagir</span>
+                        <span><strong>M</strong> Missões</span>
+                        <span><strong>ESC</strong> Pausar</span>
+                    </div>
+
+                    <button type="button" id="btn-start-game" class="pixel-btn pixel-btn-primary pixel-btn-lg">INICIAR
+                        MISSÃO</button>
+                </div>
+            </div>
+
+            <!-- LAYER 7: PAUSA -->
+            <div id="screen-pause" class="modal-backdrop is-hidden" aria-hidden="true">
+                <div class="pixel-panel small-modal-card">
+                    <h2 class="modal-title-gold">JOGO PAUSADO</h2>
+                    <p class="modal-subtitle">O cronômetro comunitário está em espera.</p>
+                    <div class="modal-actions-col">
+                        <button type="button" id="btn-pause-resume"
+                            class="pixel-btn pixel-btn-primary">CONTINUAR</button>
+                        <button type="button" id="btn-pause-restart" class="pixel-btn pixel-btn-secondary">REINICIAR
+                            PARTIDA</button>
+                        <button type="button" id="btn-pause-menu" class="pixel-btn pixel-btn-danger">MENU
+                            PRINCIPAL</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LAYER 8: TELA DE VITÓRIA (EXCLUSIVA) -->
+            <div id="screen-victory" class="modal-backdrop end-backdrop is-hidden" aria-hidden="true">
+                <div class="pixel-panel end-card victory-card">
+                    <div class="end-banner victory-banner">MISSÃO CUMPRIDA!</div>
+                    <h2 class="end-subtitle">A Vila Esperança agradece!</h2>
+
+                    <div class="end-illustration">
+                        <img data-icon="portrait-antonio" alt="" class="pixel-img celeb-avatar" width="40" height="40">
+                        <img data-icon="portrait-coordenadora" alt="" class="pixel-img celeb-avatar" width="44"
+                            height="44">
+                        <img data-icon="portrait-player" alt="" class="pixel-img celeb-avatar hero-avatar" width="48"
+                            height="48">
+                        <img data-icon="portrait-joao" alt="" class="pixel-img celeb-avatar" width="44" height="44">
+                        <img data-icon="portrait-morador" alt="" class="pixel-img celeb-avatar" width="40" height="40">
+                    </div>
+
+                    <p class="end-message">
+                        Graças à sua vigilância e cuidado, a Vila Esperança agora é um bairro saudável, sustentável e
+                        seguro para todos!
+                    </p>
+
+                    <div class="summary-grid">
+                        <div class="summary-cell">
+                            <img data-icon="icon-check" alt="" class="pixel-img" width="20" height="20">
+                            <div>
+                                <span class="sum-label">MISSÕES</span>
+                                <strong class="sum-val" id="vic-missions">4/4</strong>
+                            </div>
+                        </div>
+                        <div class="summary-cell">
+                            <img data-icon="icon-lixo" alt="" class="pixel-img" width="20" height="20">
+                            <div>
+                                <span class="sum-label">CUIDADOS</span>
+                                <strong class="sum-val" id="vic-cares">9/9</strong>
+                            </div>
+                        </div>
+                        <div class="summary-cell">
+                            <img data-icon="icon-star" alt="" class="pixel-img" width="20" height="20">
+                            <div>
+                                <span class="sum-label">PONTUAÇÃO</span>
+                                <strong class="sum-val" id="vic-score">450/450</strong>
+                            </div>
+                        </div>
+                        <div class="summary-cell">
+                            <img data-icon="icon-clock" alt="" class="pixel-img" width="20" height="20">
+                            <div>
+                                <span class="sum-label">TEMPO RESTANTE</span>
+                                <strong class="sum-val" id="vic-time">00:00</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="end-actions-row">
+                        <button type="button" id="btn-victory-replay" class="pixel-btn pixel-btn-primary">JOGAR
+                            NOVAMENTE</button>
+                        <button type="button" id="btn-victory-menu" class="pixel-btn pixel-btn-secondary">MENU
+                            PRINCIPAL</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LAYER 8: TELA DE TEMPO ESGOTADO (EXCLUSIVA) -->
+            <div id="screen-gameover" class="modal-backdrop end-backdrop is-hidden" aria-hidden="true">
+                <div class="pixel-panel end-card gameover-card">
+                    <div class="end-banner gameover-banner">O TEMPO ACABOU!</div>
+                    <h2 class="end-subtitle">A prevenção continua!</h2>
+
+                    <p class="end-message">
+                        Cada cuidado faz a diferença. Continue ajudando a Vila Esperança!
+                    </p>
+
+                    <div class="summary-grid summary-grid-3">
+                        <div class="summary-cell">
+                            <img data-icon="icon-star" alt="" class="pixel-img" width="20" height="20">
+                            <div>
+                                <span class="sum-label">PONTUAÇÃO</span>
+                                <strong class="sum-val" id="go-score">0/450</strong>
+                            </div>
+                        </div>
+                        <div class="summary-cell">
+                            <img data-icon="icon-check" alt="" class="pixel-img" width="20" height="20">
+                            <div>
+                                <span class="sum-label">MISSÕES</span>
+                                <strong class="sum-val" id="go-missions">0/4</strong>
+                            </div>
+                        </div>
+                        <div class="summary-cell">
+                            <img data-icon="icon-lixo" alt="" class="pixel-img" width="20" height="20">
+                            <div>
+                                <span class="sum-label">CUIDADOS</span>
+                                <strong class="sum-val" id="go-cares">0/9</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="end-actions-row">
+                        <button type="button" id="btn-gameover-retry" class="pixel-btn pixel-btn-primary">TENTAR
+                            NOVAMENTE</button>
+                        <button type="button" id="btn-gameover-menu" class="pixel-btn pixel-btn-secondary">MENU
+                            PRINCIPAL</button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div id="prompt-interaction">[E] ou [ESPAÇO] INTERAGIR</div>
     </div>
 
     <!-- Módulos do Jogo -->
     <script src="js/audio.js"></script>
     <script src="js/assets.js"></script>
+    <script src="js/uiManager.js"></script>
     <script src="js/minigame.js"></script>
     <script src="js/worldScene.js"></script>
     <script src="js/main.js"></script>

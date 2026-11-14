@@ -295,9 +295,149 @@ class AssetGenerator {
             ctx.fillStyle = '#4a5568'; ctx.fillRect(6, 4, 20, 16); // lixeira suspensa fechada
             ctx.fillStyle = '#718096'; ctx.fillRect(14, 20, 4, 4);  // suporte metálico elevado
         });
+
+        // 18. Ícones de UI, Retratos e Sprites do Minigame
+        this.createUiAssets(scene);
+    }
+
+    static createUiAssets(scene) {
+        // Ícone Dengue (16x16 - Mosquito/Água parada)
+        this.makeTile(scene, 'icon-dengue', 16, 16, (ctx) => {
+            ctx.fillStyle = '#5F9164'; ctx.fillRect(2, 10, 12, 4);
+            ctx.fillStyle = '#3182ce'; ctx.fillRect(3, 8, 10, 3);
+            ctx.fillStyle = '#C9584E'; ctx.fillRect(6, 3, 4, 4);
+            ctx.fillStyle = '#F3EBD6'; ctx.fillRect(4, 2, 3, 2); ctx.fillRect(9, 2, 3, 2);
+        });
+
+        // Ícone Rua Alagada (16x16 - Onda + Cone)
+        this.makeTile(scene, 'icon-rua', 16, 16, (ctx) => {
+            ctx.fillStyle = '#3182ce'; ctx.fillRect(1, 10, 14, 4);
+            ctx.fillStyle = '#63b3ed'; ctx.fillRect(3, 9, 4, 2); ctx.fillRect(9, 9, 4, 2);
+            ctx.fillStyle = '#dd6b20'; ctx.fillRect(6, 3, 4, 6);
+            ctx.fillStyle = '#F3EBD6'; ctx.fillRect(6, 5, 4, 2);
+        });
+
+        // Ícone Calor Extremo (16x16 - Sol dourado)
+        this.makeTile(scene, 'icon-calor', 16, 16, (ctx) => {
+            ctx.fillStyle = '#E5B65A'; ctx.fillRect(5, 5, 6, 6);
+            ctx.fillRect(7, 1, 2, 3); ctx.fillRect(7, 12, 2, 3);
+            ctx.fillRect(1, 7, 3, 2); ctx.fillRect(12, 7, 3, 2);
+            ctx.fillRect(3, 3, 2, 2); ctx.fillRect(11, 3, 2, 2);
+            ctx.fillRect(3, 11, 2, 2); ctx.fillRect(11, 11, 2, 2);
+        });
+
+        // Ícone Bairro Limpo (16x16 - Folha/Reciclagem)
+        this.makeTile(scene, 'icon-lixo', 16, 16, (ctx) => {
+            ctx.fillStyle = '#5F9164'; ctx.fillRect(4, 3, 8, 8);
+            ctx.fillStyle = '#244C3A'; ctx.fillRect(6, 5, 4, 4);
+            ctx.fillStyle = '#F3EBD6'; ctx.fillRect(7, 6, 2, 2);
+            ctx.fillStyle = '#70543C'; ctx.fillRect(7, 11, 2, 4);
+        });
+
+        // Ícone Check (16x16)
+        this.makeTile(scene, 'icon-check', 16, 16, (ctx) => {
+            ctx.fillStyle = '#244C3A'; ctx.fillRect(1, 1, 14, 14);
+            ctx.fillStyle = '#5F9164'; ctx.fillRect(2, 2, 12, 12);
+            ctx.fillStyle = '#F3EBD6';
+            ctx.fillRect(4, 8, 2, 2); ctx.fillRect(6, 10, 2, 2);
+            ctx.fillRect(8, 8, 2, 2); ctx.fillRect(10, 6, 2, 2); ctx.fillRect(12, 4, 2, 2);
+        });
+
+        // Ícone Estrela / Pontos (16x16)
+        this.makeTile(scene, 'icon-star', 16, 16, (ctx) => {
+            ctx.fillStyle = '#E5B65A';
+            ctx.fillRect(7, 1, 2, 14); ctx.fillRect(1, 6, 14, 3);
+            ctx.fillRect(4, 4, 8, 7); ctx.fillRect(3, 11, 3, 3); ctx.fillRect(10, 11, 3, 3);
+            ctx.fillStyle = '#F3EBD6'; ctx.fillRect(6, 5, 2, 2);
+        });
+
+        // Ícone Relógio / Tempo (16x16)
+        this.makeTile(scene, 'icon-clock', 16, 16, (ctx) => {
+            ctx.fillStyle = '#70543C'; ctx.fillRect(2, 2, 12, 12);
+            ctx.fillStyle = '#F3EBD6'; ctx.fillRect(4, 4, 8, 8);
+            ctx.fillStyle = '#244C3A'; ctx.fillRect(7, 5, 2, 4); ctx.fillRect(7, 8, 4, 2);
+        });
+
+        // Ícone Bússola (16x16)
+        this.makeTile(scene, 'icon-compass', 16, 16, (ctx) => {
+            ctx.fillStyle = '#70543C'; ctx.fillRect(2, 2, 12, 12);
+            ctx.fillStyle = '#F3EBD6'; ctx.fillRect(4, 4, 8, 8);
+            ctx.fillStyle = '#C9584E'; ctx.fillRect(7, 4, 2, 4);
+            ctx.fillStyle = '#244C3A'; ctx.fillRect(7, 8, 2, 4);
+        });
+
+        // Retratos 32x32 dos Personagens para Diálogos
+        this.makePortrait(scene, 'portrait-player', '#2b6cb0', '#f4f1ea', '#244C3A');
+        this.makePortrait(scene, 'portrait-coordenadora', '#9b2c2c', '#ecc94b', '#244C3A');
+        this.makePortrait(scene, 'portrait-antonio', '#e2e8f0', '#e2e8f0', '#70543C');
+        this.makePortrait(scene, 'portrait-joao', '#285e61', '#cbd5e0', '#244C3A');
+        this.makePortrait(scene, 'portrait-morador', '#7b341e', '#e2e8f0', '#70543C');
+
+        // Sprites de Resíduos do Minigame (32x32)
+        this.makeTile(scene, 'waste-papel', 32, 32, (ctx) => {
+            ctx.fillStyle = '#70543C'; ctx.fillRect(4, 8, 24, 18);
+            ctx.fillStyle = '#d69e2e'; ctx.fillRect(6, 10, 20, 14);
+            ctx.fillStyle = '#F3EBD6'; ctx.fillRect(10, 14, 12, 6);
+            ctx.fillStyle = '#70543C'; ctx.fillRect(15, 8, 2, 18);
+        });
+        this.makeTile(scene, 'waste-vidro', 32, 32, (ctx) => {
+            ctx.fillStyle = '#276749'; ctx.fillRect(13, 3, 6, 7);
+            ctx.fillStyle = '#38a169'; ctx.fillRect(10, 10, 12, 18);
+            ctx.fillStyle = '#9ae6b4'; ctx.fillRect(12, 12, 2, 12);
+            ctx.fillStyle = '#E5B65A'; ctx.fillRect(13, 2, 6, 2);
+        });
+        this.makeTile(scene, 'waste-plastico', 32, 32, (ctx) => {
+            ctx.fillStyle = '#C9584E'; ctx.fillRect(13, 2, 6, 3);
+            ctx.fillStyle = '#63b3ed'; ctx.fillRect(10, 7, 12, 21);
+            ctx.fillStyle = '#bee3f8'; ctx.fillRect(12, 9, 3, 15);
+            ctx.fillStyle = '#C9584E'; ctx.fillRect(10, 14, 12, 5);
+        });
+        this.makeTile(scene, 'waste-organico', 32, 32, (ctx) => {
+            ctx.fillStyle = '#C9584E'; ctx.fillRect(8, 8, 16, 6);
+            ctx.fillStyle = '#F3EBD6'; ctx.fillRect(12, 14, 8, 6);
+            ctx.fillStyle = '#C9584E'; ctx.fillRect(8, 20, 16, 6);
+            ctx.fillStyle = '#70543C'; ctx.fillRect(15, 3, 2, 5);
+            ctx.fillStyle = '#5F9164'; ctx.fillRect(17, 4, 5, 3);
+        });
+
+        // Coletores do Minigame (40x48)
+        this.makeBin(scene, 'bin-papel', '#2b6cb0', '#63b3ed', '#F3EBD6');
+        this.makeBin(scene, 'bin-vidro', '#2f855a', '#68d391', '#F3EBD6');
+        this.makeBin(scene, 'bin-plastico', '#c53030', '#fc8181', '#F3EBD6');
+        this.makeBin(scene, 'bin-organico', '#70543C', '#9c7a5b', '#E5B65A');
+    }
+
+    static makePortrait(scene, key, hairColor, shirtColor, bgColor) {
+        this.makeTile(scene, key, 32, 32, (ctx) => {
+            ctx.fillStyle = bgColor; ctx.fillRect(0, 0, 32, 32);
+            ctx.fillStyle = shirtColor; ctx.fillRect(6, 22, 20, 10);
+            ctx.fillStyle = '#e2a373'; ctx.fillRect(9, 9, 14, 13);
+            ctx.fillStyle = hairColor; ctx.fillRect(8, 5, 16, 6);
+            ctx.fillStyle = '#1a202c'; ctx.fillRect(12, 14, 2, 3); ctx.fillRect(18, 14, 2, 3);
+            ctx.fillStyle = '#9c4221'; ctx.fillRect(14, 19, 4, 1);
+        });
+    }
+
+    static makeBin(scene, key, bodyColor, lidColor, symbolColor) {
+        this.makeTile(scene, key, 40, 48, (ctx) => {
+            ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.fillRect(5, 43, 30, 4);
+            ctx.fillStyle = bodyColor; ctx.fillRect(6, 14, 28, 30);
+            ctx.fillStyle = lidColor; ctx.fillRect(4, 8, 32, 7);
+            ctx.fillRect(14, 4, 12, 4);
+            ctx.fillStyle = symbolColor;
+            ctx.fillRect(15, 22, 10, 2); ctx.fillRect(15, 22, 2, 10);
+            ctx.fillRect(23, 22, 2, 10); ctx.fillRect(15, 30, 10, 2);
+        });
+    }
+
+    static getDataUrl(scene, key) {
+        if (!scene.textures.exists(key)) return '';
+        const source = scene.textures.get(key).getSourceImage();
+        return source && source.toDataURL ? source.toDataURL() : '';
     }
 
     static makeTile(scene, key, w, h, drawFn) {
+        if (scene.textures.exists(key)) return;
         const canvas = document.createElement('canvas');
         canvas.width = w; canvas.height = h;
         const ctx = canvas.getContext('2d');
@@ -306,6 +446,7 @@ class AssetGenerator {
     }
 
     static makeCharacter(scene, key, skinColor, shirtColor, pantsColor) {
+        if (scene.textures.exists(key)) return;
         const canvas = document.createElement('canvas');
         canvas.width = 24; canvas.height = 32;
         const ctx = canvas.getContext('2d');
