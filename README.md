@@ -1,82 +1,47 @@
-# Cuidar Transforma – Vila Esperança | PET-Saúde
+# Cuidar Transforma — Vila Esperança
 
-Jogo educativo 2D pixel-art desenvolvido com **Phaser 3** sobre vigilância em saúde, cuidados comunitários e prevenção de riscos socioambientais na Vila Esperança.
+Jogo educativo 2D em pixel art do PET-Saúde. O jogador explora um bairro fictício como agente comunitário, conversa com moradores e resolve missões relacionadas a dengue, alagamentos, calor extremo e descarte de resíduos.
 
----
+## Por que foi feito
 
-## 📁 Estrutura do Projeto
+O jogo leva temas de vigilância em saúde e prevenção socioambiental a uma atividade interativa. A Vila Esperança reúne situações próximas do cotidiano em um mapa que pode ser explorado durante oficinas ou demonstrações. Diálogos, objetivos e retorno imediato ajudam a ligar cada ação ao problema que ela aborda.
 
-```text
-jogo-petsaude/
-├── index.html            # Estrutura HTML do jogo, container do Phaser e HUD com Bússola
-├── css/
-│   └── style.css         # Estilização da interface, HUD, Bússola e canvas
-├── js/
-│   ├── audio.js          # Síntese sonora procedural chiptune (Web Audio API)
-│   ├── assets.js         # Geração procedural de texturas e sprites pixel-art (2.5D)
-│   ├── minigame.js       # Minigame de triagem da coleta seletiva
-│   ├── worldScene.js     # Cena principal: mapa 2400x1800, 5 regiões, diálogos e missões
-│   └── main.js           # Inicialização e configuração do Phaser 3
-└── README.md             # Documentação e instruções do projeto
-```
+## Como jogar
 
----
+Use **WASD** ou **setas** para andar. Pressione **E** ou **Espaço** para interagir e use **1 a 4** nas escolhas e na triagem. A interface também oferece cliques e botões na tela. O painel de missões e a bússola ajudam a localizar objetivos pendentes.
 
-## 🗺️ Mapa Expandido da Vila Esperança (2400 × 1800)
+| Missão | O que o jogo trabalha | Pontos |
+| --- | --- | ---: |
+| Operação Dengue | Identificar e corrigir situações com água parada. | 100 |
+| Rua Alagada | Sinalizar a área de risco e cumprir os objetivos da rua. | 100 |
+| Calor Extremo | Auxiliar o morador e ativar recursos de apoio na praça. | 100 |
+| Bairro Limpo | Cuidar do descarte e completar o minijogo de triagem. | 150 |
 
-O mapa foi ampliado para **2400 × 1800 pixels**, dividido em 5 regiões conectadas e detalhadas:
+A Vila Esperança tem praça central, bairro residencial, área ambiental, rua principal e entrada da comunidade. A pontuação total indicada no painel é 450. As missões são simulações educativas. Ao revisar textos sobre saúde e clima, valide as orientações com a equipe do PET-Saúde.
 
-1. **🏛️ Praça da Esperança (Centro - X: 1200, Y: 900)**:
-   - Ampla praça pavimentada em pedra portuguesa, canteiros floridos, bancos e postes coloniais.
-   - Ponto de Resfriamento com bebedouro público e tenda comunitária.
-   - Encontro com a **Coordenadora** e o **Seu Antônio**.
+## Como foi feito
 
-2. **🏡 Bairro Residencial (Norte - X: 1200, Y: 390)**:
-   - Conjunto de casas coloniais coloridas (azul, amarelo, verde, terracota), cercas e quintais.
-   - Encontro com **João**, vaso de planta e caixa d'água destampada da **Operação Dengue**.
+A página [index.html](index.html) carrega o Phaser 3.70.0 por CDN e abre a interface. O projeto roda no navegador com HTML, CSS e JavaScript, sem backend e sem etapa de build.
 
-3. **🌿 Área Ambiental (Oeste - X: 450, Y: 860)**:
-   - Clareira de terra batida com composteira comunitária, árvores e arbustos nativos.
-   - Pneus e garrafas acumulando água.
-   - Encontro com o **Morador** e a **Estação de Coleta Seletiva**.
+| Arquivo | Responsabilidade |
+| --- | --- |
+| [main.js](js/main.js) | Inicialização do Phaser e ajuste da escala da tela. |
+| [worldScene.js](js/worldScene.js) | Mapa, personagem, NPCs, diálogos, objetivos e regras do jogo. |
+| [uiManager.js](js/uiManager.js) | Estados da interface, painéis e indicadores. |
+| [minigame.js](js/minigame.js) | Minijogo de triagem da coleta seletiva. |
+| [assets.js](js/assets.js) e [audio.js](js/audio.js) | Geração de recursos gráficos e síntese de áudio. |
+| [style.css](css/style.css) | Estilos, posicionamento e adaptação da interface. |
 
-4. **🚗 Rua Principal (Leste - X: 2020, Y: 900)**:
-   - Ampla avenida asfaltada de pista dupla com calçadas e postes de iluminação.
-   - Bueiro entupido com resíduos e área de alagamento com risco de leptospirose.
+## Como rodar e validar
 
-5. **🚪 Entrada da Comunidade (Sul - X: 1200, Y: 1550)**:
-   - Via principal de acesso ao bairro, ladeada por casas coloniais, jardins e a placa *"Bem-vindos à Vila Esperança"*.
+Na raiz do checkout, execute o comando abaixo com Python 3 instalado e abra http://localhost:8000. A primeira carga precisa de acesso à CDN do Phaser. Existe uma [versão publicada do jogo](https://jogo-petsaude.vercel.app/).
 
----
+~~~bash
+python -m http.server 8000
+~~~
 
-## 🧭 Bússola e Guia de Orientação
+Ao mudar o jogo, confirme a entrada pelo menu, a movimentação e a escala em diferentes janelas. Abra e feche um diálogo mantendo E ou Espaço pressionado para verificar que ele não reabre sozinho. Teste os botões de tela, o minijogo e a conclusão das quatro missões, conferindo o placar final.
 
-Integrada ao painel da interface (HUD), a bússola calcula em tempo real a distância em metros e a direção cardeal/colateral (Norte, Sul, Leste, Oeste, etc.) para os objetivos pendentes de cada uma das 4 frentes de cuidado.
+## Contexto para assistentes de IA
 
----
-
-## 💬 Sistema Definitivo de Diálogos
-
-- **Fechamento Instantâneo**: Pressionar `[ESPAÇO]`, `[E]` ou clicar fecha o diálogo de imediato.
-- **Prevenção de Reabertura Involuntária**: Trava de liberação obrigatória da tecla (`keys.isUp`) e debounce de 250ms impedem que manter a tecla pressionada feche e reabra o diálogo em loop.
-- **Permanência no Local**: O jogador pode fechar a conversa e continuar ao lado do NPC sem que o diálogo reabra sozinho.
-- **Reabertura Intencional**: Uma nova interação ocorre somente com um novo toque intencional na tecla.
-- **Movimentação Imediata**: WASD e setas respondem no mesmo instante após o fechamento.
-
----
-
-## 🎯 Missões e Cuidados Preventivos (450 Pontos)
-
-1. **🪣 Operação Dengue (3 cuidados - 100 pts)**: Vaso com areia, pneus/garrafas recolhidos e caixa d'água vedada.
-2. **🌊 Rua Alagada (2 cuidados - 100 pts)**: Desobstrução segura de bueiro e sinalização com cones.
-3. **☀️ Calor Extremo (2 cuidados - 100 pts)**: Guarda-sol e água fresca para o Seu Antônio, tenda e bebedouro ativados.
-4. **♻️ Bairro Limpo (2 cuidados - 150 pts)**: Conscientização sobre lixeira suspensa e minigame de triagem concluído.
-
----
-
-## 🎮 Controles
-
-- **W, A, S, D** ou **Setas do Teclado**: Movimentar o Agente Comunitário (Velocidade 190)
-- **E** ou **Espaço**: Interagir com objetos/moradores e fechar diálogos
-- **1, 2, 3, 4**: Escolher alternativas e separar resíduos na triagem
-- **Mouse / Clique**: Também suportado para fechar diálogos e selecionar opções
+Leia [AGENTS.md](AGENTS.md) antes de alterar objetivos, controles, interface ou mensagens educativas.
